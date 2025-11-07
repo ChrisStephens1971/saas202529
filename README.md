@@ -10,7 +10,7 @@
 
 This template provides a complete Azure-specific SaaS project structure with:
 
-- **Azure Naming Standard v1.1** - Comprehensive naming and tagging conventions
+- **Azure Naming Standard v1.2** - Comprehensive naming and tagging conventions
 - **Infrastructure as Code** - Both Terraform and Bicep support
 - **Automation Scripts** - Name generation, validation, and tag management
 - **CI/CD Pipelines** - GitHub Actions and Azure DevOps templates
