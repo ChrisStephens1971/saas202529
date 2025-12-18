@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+# Pre-push hook: Check GitHub Actions status before pushing
+# Prevents pushing if latest workflow run failed
+
+set -e
+
+# Check if gh CLI is available
+if ! command -v gh &> /dev/null; then
+    echo "⚠️  GitHub CLI (gh) not found - skipping workflow check"
+    exit 0
+fi
+
+# Get current branch
+branch=$(git rev-parse --abbrev-ref HEAD)
+
+# Get repository from remote
+repo_url=$(git remote get-url origin 2>/dev/null || echo "")
+if [[ ! "$repo_url" =~ github.com ]]; then
+    echo "⚠️  Not a GitHub repository - skipping workflow check"
+    exit 0
+fi
+
+# Extract repo name
+repo=$(echo "$repo_url" | sed -E 's|.*github.com[:/]([^/]+/[^.]+)(\.git)?|\1|')
+
+echo "🔍 Checking GitHub Actions status for $repo..."
+
+# Get latest workflow run for current branch
+latest_run=$(gh run list --repo "$repo" --branch "$branch" --limit 1 --json conclusion,status,name,workflowName 2>/dev/null || echo "[]")
+
+if [ "$latest_run" = "[]" ]; then
+    echo "✅ No workflow runs found - allowing push"
+    exit 0
+fi
+
+conclusion=$(echo "$latest_run" | jq -r '.[0].conclusion')
+status=$(echo "$latest_run" | jq -r '.[0].status')
+workflow=$(echo "$latest_run" | jq -r '.[0].workflowName')
+
+if [ "$status" = "completed" ] && [ "$conclusion" = "failure" ]; then
+    echo "❌ Latest GitHub Actions workflow FAILED: $workflow"
+    echo ""
+    echo "🚫 PUSH BLOCKED: Fix GitHub Actions errors before pushing new code."
+    echo ""
+    echo "To view the failure:"
+    echo "  gh run view --repo $repo"
+    echo ""
+    echo "To bypass this check (NOT RECOMMENDED):"
+    echo "  git push --no-verify"
+    exit 1
+fi
+
+if [ "$status" = "completed" ] && [ "$conclusion" != "success" ]; then
+    echo "⚠️  Latest workflow conclusion: $conclusion"
+    echo "Workflow: $workflow"
+fi
+
+echo "✅ GitHub Actions status OK - allowing push"
+exit 0

@@ -1,0 +1,51 @@
+{
+  "projectId": "saas202529",
+  "projectCode": "202529",
+  "projectName": "TBD",
+  "tradeName": "TBD",
+  "organization": "vrd",
+  "templateType": "azure",
+  "status": "Planning",
+  "description": "Azure-based SaaS project (planning phase)",
+  "phases": {
+    "planning": 0,
+    "design": 0,
+    "development": 0,
+    "testing": 0,
+    "deployment": 0
+  },
+  "infrastructure": {
+    "provider": "azure",
+    "region": "eus2",
+    "environment": "dev",
+    "resourcesDeployed": 0,
+    "resources": []
+  },
+  "health": {
+    "technical": "Good",
+    "deploymentReady": false,
+    "hasBlockers": false,
+    "blockerCount": 0
+  },
+  "progress": {
+    "completionPercent": 0,
+    "featuresTotal": 0,
+    "featuresCompleted": 0
+  },
+  "statusSummary": "Azure project template created. Ready for planning.",
+  "nextSteps": [
+    "Define project vision and requirements",
+    "Create product roadmap",
+    "Design Azure architecture",
+    "Configure Azure resources"
+  ],
+  "lastUpdated": "2025-11-07T14:57:18Z",
+  "projectPath": "C:/devop/saas202529"
+  ,
+  "workflow": {
+    "currentPhase": "",
+    "phasesCompleted": [],
+    "lastPhaseTransition": null,
+    "checklistSource": ".project-workflow.json"
+  }
+}
